@@ -419,13 +419,15 @@ static rt_err_t _cdc_set_line_coding_callback(udevice_t device, rt_size_t size)
  */
 static rt_err_t _cdc_set_line_coding(udevice_t device, ureq_t setup)
 {
+    rt_uint16_t size;
+
     RT_ASSERT(device != RT_NULL);
     RT_ASSERT(setup != RT_NULL);
 
     LOG_D("_cdc_set_line_coding");
 
-    rt_usbd_ep0_read(device, (void*)&line_coding, sizeof(struct ucdc_line_coding),
-        _cdc_set_line_coding_callback);
+    size = setup->wLength > 7 ? 7 : setup->wLength;
+    rt_usbd_ep0_read(device, (void*)&line_coding, size, _cdc_set_line_coding_callback);
 
     return RT_EOK;
 }
