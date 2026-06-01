@@ -20,6 +20,10 @@
 #define FINSH_ARG_MAX    8
 #endif /* FINSH_ARG_MAX */
 
+#ifndef FINSH_HELP_CMD_NAME_WIDTH
+#define FINSH_HELP_CMD_NAME_WIDTH 16
+#endif /* FINSH_HELP_CMD_NAME_WIDTH */
+
 #include "msh.h"
 #include "shell.h"
 #ifdef DFS_USING_POSIX
@@ -44,7 +48,7 @@ static int msh_help(int argc, char **argv)
                 FINSH_NEXT_SYSCALL(index))
         {
 #if defined(FINSH_USING_DESCRIPTION)
-            rt_kprintf("%-16s - %s\n", index->name, index->desc);
+            rt_kprintf("%-*s - %s\n", FINSH_HELP_CMD_NAME_WIDTH, index->name, index->desc);
 #else
             rt_kprintf("%s ", index->name);
 #endif  /* FINSH_USING_DESCRIPTION */
@@ -944,7 +948,7 @@ static void msh_opt_help(msh_cmd_opt_t *cmd_opt)
 
     for (; opt->id; opt++)
     {
-        rt_kprintf("%-16s - %s\n", opt->name, opt->des);
+        rt_kprintf("%-*s - %s\n", FINSH_HELP_CMD_NAME_WIDTH, opt->name, opt->des);
     }
     rt_kprintf("\n");
 }
@@ -1006,7 +1010,7 @@ void msh_opt_list_dump(void *options)
 
     for (; opt && opt->id; opt++)
     {
-        rt_kprintf("    %-16s - %s\n", opt->name, opt->des);
+        rt_kprintf("    %-*s - %s\n", FINSH_HELP_CMD_NAME_WIDTH, opt->name, opt->des);
     }
 }
 #endif /* FINSH_USING_OPTION_COMPLETION */
