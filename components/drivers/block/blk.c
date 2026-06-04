@@ -472,13 +472,13 @@ INIT_ENV_EXPORT(blk_dfs_mnt_table);
 
 #if defined(RT_USING_CONSOLE) && defined(RT_USING_MSH)
 const char *convert_size(struct rt_device_blk_geometry *geome,
-        rt_size_t sector_count, rt_size_t *out_cap, rt_size_t *out_minor)
+        rt_uint64_t sector_count, rt_size_t *out_cap, rt_size_t *out_minor)
 {
-    rt_size_t cap, minor = 0;
-    int size_index = 0;
+    rt_uint64_t cap, minor = 0;
+    rt_size_t size_index = 0;
     const char *size_name[] = { "B", "K", "M", "G", "T", "P", "E" };
 
-    cap = geome->bytes_per_sector * sector_count;
+    cap = (rt_uint64_t)geome->bytes_per_sector * sector_count;
 
     for (size_index = 0; size_index < RT_ARRAY_SIZE(size_name) - 1; ++size_index)
     {
@@ -492,8 +492,8 @@ const char *convert_size(struct rt_device_blk_geometry *geome,
         cap = cap / 1024;
     }
 
-    *out_cap = cap;
-    *out_minor = minor;
+    *out_cap = (rt_size_t)cap;
+    *out_minor = (rt_size_t)minor;
 
     return size_name[size_index];
 }
